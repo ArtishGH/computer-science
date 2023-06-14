@@ -1,7 +1,6 @@
 def rail_fence_cipher(plaintext, rails):
     fence = [[''] * len(plaintext) for _ in range(rails)]
-    rail = 0
-    direction = 1
+    rail, direction = 0, 1
 
     for char in plaintext:
         fence[rail][fence[rail].index('')] = char
@@ -10,19 +9,15 @@ def rail_fence_cipher(plaintext, rails):
         if rail == rails - 1 or rail == 0:
             direction = -direction
 
-    ciphertext = ''
-    for rail in fence:
-        ciphertext += ''.join(rail)
-
+    ciphertext = ''.join(''.join(row) for row in fence)
     return ciphertext
 
 
 def rail_fence_decipher(ciphertext, rails):
     fence = [[''] * len(ciphertext) for _ in range(rails)]
-    rail = 0
-    direction = 1
+    rail, direction = 0, 1
 
-    for _ in range(len(ciphertext)):
+    for i in range(len(ciphertext)):
         fence[rail][fence[rail].index('')] = '*'
         rail += direction
 
@@ -36,13 +31,12 @@ def rail_fence_decipher(ciphertext, rails):
                 rail[i] = ciphertext[index]
                 index += 1
 
-    rail = 0
-    direction = 1
+    rail, direction = 0, 1
     plaintext = ''
     for _ in range(len(ciphertext)):
         plaintext += fence[rail][0]
-        fence[rail].pop(0)
         rail += direction
+        fence[rail].pop(0)
 
         if rail == rails - 1 or rail == 0:
             direction = -direction
